@@ -29,13 +29,17 @@ dbAssert.addCondition("last_name", "Coupland");
 }}}
   # You’re able to make assertions now.
 {{{
+
 dbAssert.assert_column("customers.name", "Douglas");
 //Where “customers.name” is table name and field name to retrieve value from. “Douglas” is the value we expect in this database field. You can add as many assertions as you want.
 }}}
 
-Different set of assertions.
+  # More assertions 
 {{{
-// assert customers _name_ column equals _Douglas_
+//set the table to be used first so we can reference column names directly
+dbAssert.table("customers");
+
+// assert customers _name_ column equals Douglas
 dbAssert.assert_column("name", "Douglas");
 
 //checks field _name_ contains non empty value
@@ -53,5 +57,3 @@ dbAssert.assert_count(0);
 // returns value of field “user_name” as String
 final String userName = dbAssert.column_value(”user_name”);
 }}}
-
-And there is much more. See [http://code.google.com/p/dbassert/w/list Wiki] for the details.
