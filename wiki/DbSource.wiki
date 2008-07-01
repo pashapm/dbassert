@@ -1,5 +1,5 @@
+#summary One-Putting your database to a known state
 #labels dbassert,junit,Phase-Implementation,testing
-Putting your database to a known state
 
 = Introduction =
 Everybody knows that good unit test is the test that can live on its own without any dependencies or many dependencies from other components or external datasources. Partially this can be done by mocking up external resources, but often you do really want to test your logic that retrieves something from a datasource. You want to make sure it works, don’t you? So that’s what *DbAssert* and *DbSource* are about. Yes, here is another quirky name - DbSource that allows you to put database to a known state.
