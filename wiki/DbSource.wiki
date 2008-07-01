@@ -18,7 +18,7 @@ DbSource myTestDb = dbAssert.source("testDatabase", getClass());
 }}}
 To clean a given table in a datasource use:
 {{{
-myTestDb.clean_table("customer");
+myTestDb.clean_table("customers");
 }}}
 You can pass as many table names to the _clean_table_ method as you want to be cleaned up.
 
@@ -27,9 +27,9 @@ Let’s say your test relies on some data in database so you need to load this d
 {{{
 myTestDb.fixture("customers");
 }}}
-This assumes that you want to insert records from customers.yml file to customers table.
+This assumes that you want to insert records from _customers.yml_ file to customers table.
 
-How do we find customers.yml which is YAML file format and looks like this:
+How do we find _customers.yml_ which is YAML file format and looks like this:
 {{{
 customer_one:
     id: 1
@@ -38,7 +38,7 @@ customer_two:
     id: 2
     name: Joe Doe
 }}}
-To locate it we passed reference to current class in to DbSource.init() method. This implies that we have folder named fixtures on the same level as your test class which contains all your fixture files.
+To locate it we passed reference to the invoker class in _dbAssert.source(...);_ method. This implies that we have folder named fixtures on the same level as your test class which contains all your fixture files.
 {{{
 - MyTest.java
 - fixtures/
@@ -51,10 +51,10 @@ myTestDb.fixture("org/testfw/customers.yml");
 There is one more thing. :) There is a way to get values from fixtures:
 {{{
 //load data to customers table and return fixture
-final Fixture fixtures = myTestDb.fixture("customers");
+final Fixture customers = myTestDb.fixture("customers");
 
 // get all the fields for customer_one in the fixture
-final Fixture customer_one = (Fixture) fixtures.get("customer_one");
+final Fixture customer_one = (Fixture) customers.get("customer_one");
 
 //check that value returned by business logic (customerDao) is the same that we have in database
 assertEquals(customer_one.get("name"), customerDao.findById(customer_one.get("id")));
