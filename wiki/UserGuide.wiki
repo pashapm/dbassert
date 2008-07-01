@@ -2,7 +2,7 @@
 #labels Phase-Implementation,Featured
 
 = Instructions =
-Download the library from [http://code.google.com/p/dbassert/downloads/list downloads page]
+Download the library from [http://code.google.com/p/dbassert/downloads/list downloads page].
 Put it under your classpath.
 
 The dependencies are:
