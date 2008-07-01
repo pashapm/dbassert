@@ -29,11 +29,9 @@ dbAssert.addCondition("last_name", "Coupland");
 }}}
   # You’re able to make assertions now.
 {{{
-
 dbAssert.assert_column("customers.name", "Douglas");
 //Where “customers.name” is table name and field name to retrieve value from. “Douglas” is the value we expect in this database field. You can add as many assertions as you want.
 }}}
-
   # More assertions 
 {{{
 //set the table to be used first so we can reference column names directly
