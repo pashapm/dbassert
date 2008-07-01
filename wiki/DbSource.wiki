@@ -1,4 +1,4 @@
-#summary One-Putting your database to a known state
+#summary Putting your database to a known state
 #labels dbassert,junit,Phase-Implementation,testing
 
 = Introduction =
