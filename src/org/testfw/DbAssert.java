@@ -5,6 +5,8 @@
  * AUTHOR    ** Danil Glinenko
  * EMAIL     ** dglinenko@gmail.com
  * <p/>
+ *
+ * Copyright (C) 2008 Danil Glinenko. All rights reserved.
  */
 
 package org.testfw;
