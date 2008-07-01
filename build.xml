@@ -1,0 +1,135 @@
+<?xml version="1.0" ?>
+<project name="DbAssert" basedir="." default="all">
+    <property name="app.name" value="dbassert" />
+    <!--Libraries-->
+    <property name="lib.dir" value="${basedir}/lib"/>
+    <!--Source dir-->
+    <property name="src.dir" value="${basedir}/src"/>
+    <!--Test sources-->
+    <property name="test.src.dir" value="${basedir}/test"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="target.compile.dir" value="${build.dir}"/>
+    <property name="reports.dir" value="${build.dir}/test-results"/>
+    <property name="test.out" value="${build.dir}/tests"/>
+
+    <property name="debug" value="on"/>
+    <property name="nowarn" value="on"/>
+    <property name="optimize" value="off"/>
+
+    <!--Classpath for libs-->
+    <path id="lib.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <!--Compiled sources classpath-->
+    <path id="compile.classpath">
+        <pathelement location="${target.compile.dir}"/>
+    </path>
+
+    <path id="tests.classpath">
+        <pathelement location="${test.out}"/>
+    </path>
+
+    <!-- ================================= -->
+    <!--Create the destination directories-->
+    <!-- ================================= -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${target.compile.dir}"/>
+    </target>
+
+    <!-- ================================= -->
+    <!--Compile sources ================== -->
+    <!-- ================================= -->
+    <target name="compile" depends="prepare">
+        <echo message="--------- Compiling all sources ---------" />
+        <javac nowarn="${nowarn}" destdir="${target.compile.dir}" debug="${debug}" optimize="${optimize}">
+            <src path="${src.dir}"/>
+            <classpath refid ="lib.classpath"/>
+        </javac>
+    </target>
+
+    <!-- ================================= -->
+    <!--Compile tests ==================== -->
+    <!-- ================================= -->
+    <target name="compile_tests" depends="compile">
+        <mkdir dir="${test.out}"/>
+        <javac nowarn="${nowarn}" srcdir="${test.src.dir}" destdir="${test.out}" debug="${debug}" optimize="${optimize}" source="1.5">
+            <classpath refid="lib.classpath"/>
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+
+    <!-- ================================= -->
+    <!--Run tests ======================== -->
+    <!-- ================================= -->
+    <target name="run_junit" depends="compile_tests, copy_test_resources">
+        <echo message="-------- Running jUnit tests -------" />
+        <mkdir dir="${reports.dir}"/>
+        <junit  printsummary="on" 
+                fork="on"
+                showoutput="true" 
+                forkmode="perBatch" 
+                haltonerror="off" >
+
+            <classpath>
+                <path refid="lib.classpath"/>
+                <path refid="tests.classpath" />
+                <path refid="compile.classpath" />
+            </classpath>
+
+            <formatter type="brief" usefile="false"/>
+            <formatter type="xml"/>
+
+            <batchtest todir="${reports.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*Test.java" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <!-- Copy project resources -->
+    <target name="copy_resources" depends="prepare">
+        <echo message="-------- Copying project resources -------" />
+        <copy todir="${target.compile.dir}">
+            <fileset dir="${src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!--Copy necessarry test resources.-->
+    <target name="copy_test_resources">
+        <copy todir="${test.out}">
+            <fileset dir="${test.src.dir}">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <!--Clean targer directory-->
+    <target name="clean">
+        <echo>Deleting build and dist dirs</echo>
+        <delete dir="${build.dir}" failonerror="false"/>
+        <delete dir="${dist.dir}" failonerror="false"/>
+        <delete dir="${reports.dir}" failonerror="false"/>
+    </target>
+
+
+    <target name="jar">
+        <jar jarfile="${dist.dir}/${app.name}.jar" basedir="${build.dir}">
+            <exclude name="test-results/"/>     
+            <exclude name="tests/"/>
+        </jar>
+    </target>
+
+
+
+    <target name="all" depends="clean, compile, copy_resources, run_junit, jar"/>
+</project>

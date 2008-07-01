@@ -1,0 +1,23 @@
+event_one:
+    id: 1
+    name: my event
+    login_name: dglinenko
+
+event_two:
+    id: 2
+    name: some
+    login_name: 
+
+event_three:
+    id: 3
+    name: my event3
+    login_name: ""
+
+event_four:
+    id: 4
+    name: some
+    login_name: ""
+event_five:
+    id: 5
+    name: some
+    login_name: ""
