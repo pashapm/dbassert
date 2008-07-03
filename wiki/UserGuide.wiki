@@ -2,8 +2,23 @@
 #labels Phase-Implementation,Featured
 
 = Instructions =
-Download the library from [http://code.google.com/p/dbassert/downloads/list downloads page].
-Put it under your classpath.
+  # Download the library from [http://code.google.com/p/dbassert/downloads/list downloads page].
+  # Put it under your classpath.
+  # Define your datasources using YAML in some file 
+{{{
+testSource:
+    url: jdbc:postgresql://127.0.0.1/test
+    username: postgres
+    password: postgres
+    driver: org.postgresql.Driver
+
+hsqlSource:
+    url: jdbc:hsqldb:file:testSrc
+    username: sa
+    password:
+    driver: org.hsqldb.jdbcDriver
+}}}
+  # Intialize DbAssert using with the datasources file and start using it.
 
 ==The dependencies are:==
   * [https://sourceforge.net/projects/jyaml JYaml] - JYaml is a Java library for working with the Yaml file format.
