@@ -12,12 +12,10 @@
 package org.testfw;
 
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.StringTokenizer;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.StringTokenizer;
 
 public class HsqlSource extends DbSource {
     public HsqlSource(final String sourceName, final SourceSet sourceSet, final Class invoker) {
@@ -28,7 +26,7 @@ public class HsqlSource extends DbSource {
     public void loadSchemaFile(final String schemaFileName) {
         try {
             final String sqlSchema = loadSQLFromFile(schemaFileName);
-            applySql(this.sourceSet.getConnection(this.sourceName), sqlSchema);
+            applySql(sqlSchema);
         }
         catch (SQLException e) {
             throw new RuntimeException("Unable to apply schema file: " + schemaFileName + " check your SQL schema file.", e);
@@ -59,28 +57,16 @@ public class HsqlSource extends DbSource {
     /**
      * Runs SQL statements on a given sql connection object.
      *
-     * @param connection SQL connection.
      * @param sql        SQL statements to run.
      * @throws SQLException if unable to run SQL statements.
      */
-    private void applySql(final Connection connection, final String sql) throws SQLException {
-        final Statement statement = connection.createStatement();
+    private void applySql(final String sql) throws SQLException {
         final StringTokenizer st = new StringTokenizer(sql, ";");
-
         while (st.hasMoreTokens()) {
             String token = st.nextToken().trim();
             if (!token.equals("")) {
-                statement.addBatch(token += ";");
+                this.runSqlStatement(token += ";", false);
             }
-        }
-        statement.executeBatch();
-        //release resources explicitly
-        try {
-            statement.close();
-            connection.close();
-        }
-        catch (SQLException e) {
-            //nothing
         }
     }
 
