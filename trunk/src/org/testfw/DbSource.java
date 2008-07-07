@@ -15,12 +15,12 @@ package org.testfw;
 import org.ho.yaml.Yaml;
 
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.Map;
-import java.sql.SQLException;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
 
 /**
  * Class to put your database source to a known state.
@@ -75,7 +75,7 @@ public class DbSource {
         }
     }
 
-    private Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
+    protected Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
         Connection connection = null;
         try {
             connection = this.sourceSet.getConnection(sourceName);
@@ -91,7 +91,7 @@ public class DbSource {
                 return statement.execute(sql);
             }
         } catch (SQLException e) {
-            throw new SQLException(e);
+            throw new SQLException("Unable to execute the following SQL stmt: " + sql, e);
         } finally {
             if (connection != null) {
                 connection.close();
