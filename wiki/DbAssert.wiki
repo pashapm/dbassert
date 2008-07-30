@@ -40,6 +40,10 @@ dbAssert.table("customers");
 // assert customers _name_ column equals Douglas
 dbAssert.assert_column("name", "Douglas");
 
+// HashMap can be used to assert multiple columns at once
+// where the map contains column-name/expected-value key-value pairs.
+dbAssert.assert_columns(map);
+
 //checks field _name_ contains non empty value
 dbAssert.assert_not_null(”name”);
 
