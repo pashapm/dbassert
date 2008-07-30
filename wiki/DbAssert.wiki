@@ -45,7 +45,7 @@ dbAssert.assert_column("name", "Douglas");
 dbAssert.assert_columns(map);
 
 //checks field _name_ contains non empty value
-dbAssert.assert_not_null(”name”);
+dbAssert.assert_not_empty(”name”);
 
 // check if count of records returned more than one
 dbAssert.assert_count_gt(”*”, 1);
