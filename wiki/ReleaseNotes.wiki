@@ -1,12 +1,12 @@
 #labels Phase-Implementation
 == Version 0.8.7 (_coming_) ==
-  # Got rid of HsqlSource.java
-  # Any of sources can accept db schema file now.
+1. Got rid of HsqlSource.java
+2. Any of sources can accept db schema file now.
 {{{
 testSource = dbAssert.source("testSource", "org/testfw/TestSourceSchemaFile.sql", DbAssertTest.class);
 }}}
 this loads the schema file to the datasource. Previously it was possible only for fake_source (HSQLDB).
-  # Removed DbAssert::fake_source() method. DbAssert::source() does the same now. For DbAssert there is no difference which datasource you want to use. To use HSQLDB (in-memory, file) specify source like:
+3. Removed DbAssert::fake_source() method. DbAssert::source() does the same now. For DbAssert there is no difference which datasource you want to use. To use HSQLDB (in-memory, file) specify source like:
 {{{
 hsqlSource:
     url: jdbc:hsqldb:file:testSrc
