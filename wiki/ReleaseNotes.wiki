@@ -6,6 +6,7 @@
 testSource = dbAssert.source("testSource", "org/testfw/TestSourceSchemaFile.sql", DbAssertTest.class);
 }}}
 this loads the schema file to the datasource. Previously it was possible only for fake_source (HSQLDB).
+
 3. Removed DbAssert::fake_source() method. DbAssert::source() does the same now. For DbAssert there is no difference which datasource you want to use. To use HSQLDB (in-memory, file) specify source like:
 {{{
 hsqlSource:
