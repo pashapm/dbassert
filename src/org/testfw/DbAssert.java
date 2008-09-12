@@ -60,14 +60,44 @@ public class DbAssert {
      * @return DbSource object to be used to prepare the datasource (clean tables, load data, etc.)
      */
     public DbSource source(final String sourceNameToUse, final Class invokerClass) {
+        return source(sourceNameToUse, null, invokerClass);
+    }
+
+    /**
+     * Sets source name to be used to retrieve data from.
+     *
+     * @param sourceNameToUse name of the source to use.
+     * @param schemaFile database shcema file to apply to the datasource.
+     * @return DbSource object to be used to prepare the datasource (clean tables, load data, etc.)
+     */
+    public DbSource source(final String sourceNameToUse, final String schemaFile) {
+        return source(sourceNameToUse, schemaFile, null);
+    }
+
+    /**
+     * Sets source name to be used to retrieve data from.
+     *
+     * @param sourceNameToUse name of the source to use.
+     * @param schemaFile database shcema file to apply to the datasource.
+     * @param invokerClass    class name of the DbAssert invoker to be able to load fixtures located with the invoker class.
+     * @return DbSource object to be used to prepare the datasource (clean tables, load data, etc.)
+     */
+    public DbSource source (final String sourceNameToUse, final String schemaFile, final Class invokerClass) {
         if (sourceNameToUse == null) {
             throw new IllegalArgumentException("SourceNameToUse param cannot be null.");
         }
         resetCondtions();
         this.tableName = null;
-        return this.dbSource = new DbSource(sourceNameToUse, sources, invokerClass);
-    }
+        final DbSource source = new DbSource(sourceNameToUse, sources, invokerClass);
 
+        // if schema file is provided we need to load it
+        if (schemaFile != null){
+            source.loadSchemaFile(schemaFile);
+        }
+        this.dbSource = source;
+        return source;
+
+    }
     /**
      * Sets source name to be used to retrieve data from.
      *
@@ -75,22 +105,9 @@ public class DbAssert {
      * @return DbSource object to be used to prepare the datasource (clean tables, load data, etc.)
      */
     public DbSource source(final String sourceNameToUse) {
-        return source(sourceNameToUse, null);
+        return source(sourceNameToUse, null, null);
     }
 
-    public DbSource fake_source(final String sourceName, final String schemaFileName, final Class invokerClass) {
-        if (sourceName == null || schemaFileName == null) {
-            throw new IllegalArgumentException("sourceName or schemaFileName params cannot be null");
-        }
-        resetCondtions();
-        final HsqlSource fake = new HsqlSource(sourceName, sources, invokerClass);
-        fake.loadSchemaFile(schemaFileName);
-        return this.dbSource = fake;
-    }
-
-    public DbSource fake_source(final String sourceName, final String schemaFileName) {
-        return fake_source(sourceName, schemaFileName, null);
-    }
 
     /**
      * Sets new condition clause for SELECT statement used by dbAssert to retrieve data from datasource.

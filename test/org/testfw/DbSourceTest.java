@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,24 @@ public class DbSourceTest
         door = dbSrc.new TestBackdoor();
         door2 = dbSrc2.new TestBackdoor();
         dbSrc.clean_table("test_table");
+    }
 
+    @Test
+    public void testLoadSqlFromFile() throws IOException
+    {
+        Assert.assertFalse(door.$loadSqlFromFile("org/testfw/HSqlSourceSchema.sql").isEmpty());
+    }
+
+    @Test
+    public void testDataInTheSource()
+    {
+        final DbAssert dbAssert = DbAssert.init("org/testfw/databases.yml");
+        final DbSource testSrc = dbAssert.source("hsqlSource", "org/testfw/HSqlSourceSchema.sql", getClass());
+        final Fixture customerFixtures = testSrc.fixture("customers");
+        final Fixture customer_one = (Fixture) customerFixtures.get("customer_one");
+        dbAssert.table("customers");
+        dbAssert.condition("id", (Integer) customer_one.get("id"));
+        dbAssert.assert_column("name", customer_one.get("name"));
     }
 
     @Test

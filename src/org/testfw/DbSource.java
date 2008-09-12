@@ -14,6 +14,7 @@ package org.testfw;
 
 import org.ho.yaml.Yaml;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Class to put your database source to a known state.
@@ -50,6 +52,47 @@ public class DbSource {
         this(sourceName, null, null);
     }
 
+    public void loadSchemaFile(final String schemaFileName) {
+        try {
+            final String sqlSchema = loadSQLFromFile(schemaFileName);
+            applySql(sqlSchema);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException("Unable to apply schema file: " + schemaFileName + " check your SQL schema file.", e);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Unable to load schema file: " + schemaFileName, e);
+        }
+    }
+
+    /**
+     * Runs SQL statements on a given sql connection object.
+     *
+     * @param sql        SQL statements to run.
+     * @throws SQLException if unable to run SQL statements.
+     */
+    private void applySql(final String sql) throws SQLException {
+        final StringTokenizer st = new StringTokenizer(sql, ";");
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken().trim();
+            if (!token.equals("")) {
+                this.runSqlStatement(token += ";", false);
+            }
+        }
+    }
+
+    private String loadSQLFromFile(final String fileName) throws IOException {
+        //load file and return its contents as String
+        final InputStream file = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+        if (file != null) {
+            final byte[] b = new byte[file.available()];
+            file.read(b);
+            file.close();
+            return new String(b);
+        } else {
+            throw new RuntimeException("File: " + fileName + " cannot be found or loaded:");
+        }
+    }
     /**
      * Clean tables from the given array in the datasource initialized.
      *
@@ -203,11 +246,13 @@ public class DbSource {
             return getFixtureAsStream(fixName);
         }
 
+        public String $loadSqlFromFile(final String fileName) throws IOException {
+            return loadSQLFromFile(fileName);
+        }
 
         public String $buildSQLInsertStmt(final String tableName, final Map fixture) {
             return buildSQLInsertStmt(tableName, fixture);
         }
-
     }
 
 }
