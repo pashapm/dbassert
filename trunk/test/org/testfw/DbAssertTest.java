@@ -13,8 +13,8 @@ package org.testfw;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class DbAssertTest
         testDoor = dbAssert.new TestBackdoor();
 
         //init db sources
-        testSource = dbAssert.source("testSource", DbAssertTest.class);
+        testSource = dbAssert.source("testSource", "org/testfw/TestSourceSchemaFile.sql", DbAssertTest.class);
         testOracle = dbAssert.source("testOracle", DbAssertTest.class);
     }
 
@@ -208,7 +208,7 @@ public class DbAssertTest
     public void testInitializationInDbAssert()
     {
         final DbAssert dbAssert = DbAssert.init("org/testfw/databases.yml");
-        final DbSource fakeSource = dbAssert.fake_source("hsqlSource","org/testfw/testSourceSchema.sql", getClass());
+        final DbSource fakeSource = dbAssert.source("hsqlSource", "org/testfw/HSqlSourceSchema.sql", getClass());
         fakeSource.clean_table("customers");
         final Fixture customerFixtures = fakeSource.fixture("customers");
         final Fixture customer_one  = (Fixture) customerFixtures.get("customer_one");
@@ -221,7 +221,7 @@ public class DbAssertTest
     public void testInitializationInDbAssert4()
     {
         final DbAssert dbAssert = DbAssert.init("org/testfw/databases.yml");
-        final DbSource fakeSource = dbAssert.fake_source("hsqlSource","org/testfw/testSourceSchema.sql");
+        final DbSource fakeSource = dbAssert.source("hsqlSource", "org/testfw/HSqlSourceSchema.sql");
         fakeSource.clean_table("customers");
         final Fixture customerFixtures = fakeSource.fixture("org/testfw/fixtures/customers.yml");
         final Fixture customer_one  = (Fixture) customerFixtures.get("customer_one");

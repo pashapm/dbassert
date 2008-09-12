@@ -14,7 +14,7 @@ package org.testfw;
 
 
 public class Main {
-    private static final String VERSION = "0.8.6";
+    private static final String VERSION = "0.8.7";
 
     private Main() {
     }
