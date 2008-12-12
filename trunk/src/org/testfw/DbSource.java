@@ -28,9 +28,9 @@ import java.util.StringTokenizer;
  * Class to put your database source to a known state.
  */
 public class DbSource {
-    protected SourceSet sourceSet;
-    protected String sourceName;
-    protected Class invokerClass;
+    private final SourceSet sourceSet;
+    private final String sourceName;
+    private final Class invokerClass;
     private static final String VALUE_COL = "returned_value";
     private static final String SQL_INSERT_STMT = "INSERT INTO {0}({1}) VALUES ({2})";
     private static final String SQL_DELETE_STMT = "DELETE FROM {0}";
@@ -38,7 +38,7 @@ public class DbSource {
 
 
     /**
-     * @param sourceSet  iSpecs source set.
+     * @param sourceSet  SourceSet contains connection settings to the data source.
      * @param sourceName the name of the db datasource to be used.
      * @param invoker    class name of the DbSource invoker to be able to load fixtures located with the invoker class.
      */
@@ -52,7 +52,7 @@ public class DbSource {
         this(sourceName, null, null);
     }
 
-    public void loadSchemaFile(final String schemaFileName) {
+    void loadSchemaFile(final String schemaFileName) {
         try {
             final String sqlSchema = loadSQLFromFile(schemaFileName);
             applySql(sqlSchema);
@@ -118,7 +118,7 @@ public class DbSource {
         }
     }
 
-    protected Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
+    private Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
         Connection connection = null;
         try {
             connection = this.sourceSet.getConnection(sourceName);

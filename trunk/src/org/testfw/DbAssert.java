@@ -46,9 +46,6 @@ public class DbAssert {
      * @return instanse of DbAssert class to make assertion on the data.
      */
     public static DbAssert init(final String sourcesFile) {
-        if (sourcesFile == null) {
-            throw new IllegalArgumentException("sourcesFile param cannot be null.");
-        }
         return new DbAssert(sourcesFile);
     }
 
@@ -78,7 +75,7 @@ public class DbAssert {
      * Sets source name to be used to retrieve data from.
      *
      * @param sourceNameToUse name of the source to use.
-     * @param schemaFile database shcema file to apply to the datasource.
+     * @param schemaFile database schema file to apply to the datasource.
      * @param invokerClass    class name of the DbAssert invoker to be able to load fixtures located with the invoker class.
      * @return DbSource object to be used to prepare the datasource (clean tables, load data, etc.)
      */

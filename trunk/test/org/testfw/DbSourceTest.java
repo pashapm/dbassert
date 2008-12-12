@@ -64,10 +64,22 @@ public class DbSourceTest
     @Test
     public void testClean_table()
     {
-        dbSrc.clean_table("test_table");
+        dbSrc.fixture("test_table");
         dbAssert.table("test_table");
+        dbAssert.assert_count(2);
+        dbSrc.clean_table("test_table");
         dbAssert.assert_count(0);
     }
+
+    @Test
+    public void testCleanTableWithCond(){
+        dbSrc.fixture("test_table");
+        dbAssert.table("test_table");
+        dbAssert.assert_count(2);
+//        dbSrc.clean_table("test_table");
+
+    }
+
 
     @Test
     public void testFixture()
