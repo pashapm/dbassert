@@ -33,7 +33,7 @@ public class DbSource {
     private final Class invokerClass;
     private static final String VALUE_COL = "returned_value";
     private static final String SQL_INSERT_STMT = "INSERT INTO {0}({1}) VALUES ({2})";
-    private static final String SQL_DELETE_STMT = "DELETE FROM {0}";
+    private static final String SQL_DELETE_STMT = "DELETE FROM {0} WHERE {1}";
     private static final String SQL_SELECT_COL_VAL = "SELECT {0} AS \"" + VALUE_COL + "\" FROM {1} WHERE {2}";
 
 
@@ -103,19 +103,30 @@ public class DbSource {
             throw new IllegalArgumentException("tables parameter cannot be null or empty");
         }
         for (final String table : tables) {
-            cleanTable(table);
+            cleanTable(table, null);
         }
     }
 
 
-    private void cleanTable(final String tableName) {
-        final String cleanTableSQL = MessageFormat.format(SQL_DELETE_STMT, tableName);
+    private void cleanTable(final String tableName, final String whereClause) {
+        final String where;
+        if (whereClause == null || whereClause.length() == 0) {
+            where = "1 = 1";
+        } else {
+            where = whereClause;
+        }
+        final String cleanTableSQL = MessageFormat.format(SQL_DELETE_STMT, tableName, where);
         try {
             runSqlStatement(cleanTableSQL, false);
         }
         catch (SQLException e) {
             throw new RuntimeException("Unable to clean table: " + tableName, e);
         }
+    }
+
+    public void clean_table_if(final String tableName, final String whereClause) {
+        if (tableName == null || tableName.length() == 0) { throw new IllegalArgumentException("\"tableName\" param can not be null or empty."); }
+        cleanTable(tableName, whereClause);
     }
 
     private Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
