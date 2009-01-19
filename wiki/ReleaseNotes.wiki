@@ -14,6 +14,10 @@ hsqlSource:
     username: sa
     password:
     driver: org.hsqldb.jdbcDriver
+}}}
+4. Added conditional table cleaning method.
+{{{
+dbSrc.clean_table_where("test_table", "name = \'Danil\'");
 }}} 
 
 == Version 0.8.6 ==
