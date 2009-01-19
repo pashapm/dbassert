@@ -1,5 +1,5 @@
 #labels Phase-Implementation
-== Version 0.8.7 (_coming_) ==
+== Version 0.8.7 ==
 1. Got rid of HsqlSource.java
 2. Any of sources can accept db schema file now.
 {{{
