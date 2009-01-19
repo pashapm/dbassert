@@ -124,7 +124,7 @@ public class DbSource {
         }
     }
 
-    public void clean_table_if(final String tableName, final String whereClause) {
+    public void clean_table_where(final String tableName, final String whereClause) {
         if (tableName == null || tableName.length() == 0) { throw new IllegalArgumentException("\"tableName\" param can not be null or empty."); }
         cleanTable(tableName, whereClause);
     }
