@@ -76,7 +76,7 @@ public class DbSourceTest
         dbSrc.fixture("test_table");
         dbAssert.table("test_table");
         dbAssert.assert_count(2);
-        dbSrc.clean_table_if("test_table", "id = 2");
+        dbSrc.clean_table_where("test_table", "id = 2");
         dbAssert.assert_count(1);
     }
 
@@ -85,7 +85,7 @@ public class DbSourceTest
         dbSrc.fixture("test_table");
         dbAssert.table("test_table");
         dbAssert.assert_count(2);
-        dbSrc.clean_table_if("test_table", "name = \'Danil Glinenko\'");
+        dbSrc.clean_table_where("test_table", "name = \'Danil Glinenko\'");
         dbAssert.assert_count(1);
     }
 
@@ -94,7 +94,7 @@ public class DbSourceTest
         dbSrc.fixture("test_table");
         dbAssert.table("test_table");
         dbAssert.assert_count(2);
-        dbSrc.clean_table_if("test_table", "id = 1 or name = \'Danil Glinenko\'");
+        dbSrc.clean_table_where("test_table", "id = 1 or name = \'Danil Glinenko\'");
         dbAssert.assert_count(0);
     }
 
