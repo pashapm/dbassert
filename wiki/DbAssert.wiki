@@ -1,9 +1,9 @@
 #summary DbAssert database testing easily
 #labels Featured,Phase-Implementation
 
-  # Initialize DbAssert by passing YAML file defining the datasources.
+  # Initialize DbAssert by passing YAML file defining the datasources like:
 {{{
-dbAssert = DbAssert.init("org/testfw/Sources.yml");
+dbAssert = DbAssert.init("my/package/Sources.yml");
 }}}
   # Set source name you’re going to use to check data in. This comes from your _Sources.yml_ file.
 {{{
