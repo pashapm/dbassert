@@ -20,26 +20,20 @@ final Fixture customer_one  = (Fixture) customers.get("customer_one");
 }}}
   # Set condition to search record by. To do that you need to know the field name to search by and supposed value of the field stored by your business logic you’re testing. Let’s say that my code adds new customer to hypothetical “customers” table. I know that my “customers” table contains “id” field and new customer should be stored with id 123 in this field. So I need to look record in database by “id” field with value 123.
 {{{
-dbAssert.condition("id", 123); 
-//For database it becomes SELECT … WHERE id = 123;
+dbAssert.table("customers").where("id", 123); 
+//For database it becomes SELECT … FROM customers WHERE id = 123;
 
-//Any additional condition you can add by using
-dbAssert.addCondition("last_name", "Coupland");
+//Any additional condition you may add like this:
+dbAssert.table("customers").where("id = 123").and("last_name", "Coupland");
 //In this case for database it becomes SELECT … WHERE id = 123 AND last_name = ‘Coupland’;
 }}}
   # You’re able to make assertions now.
 {{{
-dbAssert.assert_column("customers.name", "Douglas");
-//Where “customers.name” is table name and field name to retrieve value from. “Douglas” is the value we expect in this database field. You can add as many assertions as you want.
+dbAssert.assert_column("name", "Douglas");
+//Where “name” is a field name to retrieve value from. “Douglas” is the value we expect in this database field. You can add as many assertions as you want.
 }}}
   # More assertions 
 {{{
-//set the table to be used first so we can reference column names directly
-dbAssert.table("customers");
-
-// assert customers _name_ column equals Douglas
-dbAssert.assert_column("name", "Douglas");
-
 // HashMap can be used to assert multiple columns at once
 // where the map contains column-name/expected-value key-value pairs.
 dbAssert.assert_columns(map);
