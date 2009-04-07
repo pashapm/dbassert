@@ -3,14 +3,8 @@
  * <p/>
  * Created on Apr 6, 2009
  * AUTHOR    ** Danil Glinenko
- * EMAIL     ** dglinenko@rbauction.com
+ * EMAIL     ** dglinenko@gmail.com
  * <p/>
- * /**
- * This software is the confidential and proprietary information of
- * Ritchie Bros. You shall use it only in accordance with the terms of
- * the license agreement you entered into with Ritchie Bros.
- *
- * Copyright (C) 2007 Ritchie Bros. All rights reserved.
  */
 
 package net.codemate;
