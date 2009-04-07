@@ -1,4 +1,11 @@
 #labels Phase-Implementation
+== Version 0.9.1 ==
+1. API changes. Introduced new package namespace "net/codemate". Please use this one, in next version I'm going to get rid of "org/testfw" completely. 
+2. Re-factored DbAssert. No "condition" and "addCondition" methods anymore. There is a better way to do so:
+{{{
+dbAssert.table("table_name").where("id",123).and("name ='Danil'");
+}}}
+
 == Version 0.8.7 ==
 1. Got rid of HsqlSource.java
 2. Any of sources can accept db schema file now.
