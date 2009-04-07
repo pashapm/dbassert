@@ -56,6 +56,11 @@ public class DbSource {
         this(sourceName, null, null);
     }
 
+    /**
+     * Loads given db schema file to the datasource.
+     * @param schemaFileName db schema file.
+     * @return DbSource object.
+     */
     public DbSource loadSchemaFile(final String schemaFileName) {
         try {
             final String sqlSchema = loadSQLFromFile(schemaFileName);
@@ -135,7 +140,7 @@ public class DbSource {
     }
 
     private Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
-        log.info("Running following SQL:\n" + sql);
+        log.fine("Running following SQL:\n" + sql);
         Connection connection = null;
         try {
             connection = this.sourceSet.getConnection(sourceName);

@@ -22,14 +22,10 @@ public interface DbAssertInterface {
 
     DbSource source(String sourceNameToUse);
 
-//    Condition where(String param, Object value);
-//
-//    Condition where(String condition);
-//
-//    Condition where();
-
     Condition table(final String table);
+
     Condition table();
+
     void assert_column(String fieldName, Object expectedValue);
 
     void assert_not_empty(String fieldName);
