@@ -1,6 +1,6 @@
 #labels Phase-Implementation
 == Version 0.9.1 ==
-1. API changes. Introduced new package namespace "net/codemate". Please use this one, in next version I'm going to get rid of "org/testfw" completely. 
+1. API changes. Introduced new package namespace "net/codemate". Please use this one, in next version I'm going to get rid of "org/testfw" completely, however it's still there. 
 
 2. Re-factored DbAssert. No "condition" and "addCondition" methods anymore. There is a better way to do so:
 {{{
