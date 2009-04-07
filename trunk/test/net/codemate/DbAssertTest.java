@@ -49,12 +49,32 @@ public class DbAssertTest
         dbAssert.table("events").where("id", String.valueOf(event_one.get("id")));
         dbAssert.assert_column("name", event_one.get("name"));
         dbAssert.assert_column("login_name", event_one.get("login_name"));
-
     }
 
-    //@Todo: test dbAssert for asserting null values
-    //@TODO: test for conditions like "email ='something'"
+    @Test
+    public void testOnePointFive() {
+        final Fixture eventsFixture = testSource.fixture("events");
+        final Fixture event_one = (Fixture) eventsFixture.get("event_one");
+        // condition id =1
+        dbAssert.table("events").where("id=1");
+        dbAssert.assert_column("name", event_one.get("name"));
+        dbAssert.assert_column("login_name", event_one.get("login_name"));
+    }
 
+    @Test
+    public void testOnePointSix() {
+        final Fixture eventsFixture = testSource.fixture("events");
+        final Fixture event_one = (Fixture) eventsFixture.get("event_one");
+        // condition id =1
+        dbAssert.table("events").where("name='my event'");
+        dbAssert.assert_column("id", event_one.get("id"));
+        dbAssert.assert_column("login_name", event_one.get("login_name"));
+
+        dbAssert.table("events").where("name", event_one.get("name"));
+        dbAssert.assert_column("id", event_one.get("id"));
+        dbAssert.assert_column("login_name", event_one.get("login_name"));
+
+    }
 
     @Test
     public void testTwo() {
@@ -78,6 +98,7 @@ public class DbAssertTest
         dbAssert.table().where("name", event_two.get("name")).and("id", event_two.get("id"));
         dbAssert.assert_column("events.id", event_two.get("id"));
         dbAssert.assert_column("events.login_name", event_two.get("login_name"));
+        dbAssert.assert_column("events.login_name", null);
 
     }
     @Test
