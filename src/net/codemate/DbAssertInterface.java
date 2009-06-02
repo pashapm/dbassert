@@ -11,6 +11,7 @@ package net.codemate;
 
 import java.util.Map;
 
+//TODO: what did I create this interface for?
 public interface DbAssertInterface {
     DbSource source (String sourceNameToUse, Class invokerClass);
 

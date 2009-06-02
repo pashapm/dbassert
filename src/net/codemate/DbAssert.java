@@ -68,6 +68,7 @@ public class DbAssert implements DbAssertInterface {
      * @return Condition object that can be used to set additional conditions for assertions.
      */
     public Condition table(final String tableName) {
+        checkProperInitialization();
         return this.condition.table(tableName);
     }
 
@@ -76,6 +77,7 @@ public class DbAssert implements DbAssertInterface {
      * @return Condition object that can be used to set addtional conditions for assertions.
      */
     public Condition table() {
+        checkProperInitialization();
         return this.condition.table();
     }
     /**
@@ -179,6 +181,12 @@ public class DbAssert implements DbAssertInterface {
         boolean isTableSet = isTableDefined(fieldName) || this.condition.getTableName() != null;
         if (!isTableSet) {
             throw new RuntimeException("Pre conditions aren't set up. Try to specify table name.");
+        }
+    }
+
+    private void checkProperInitialization() {
+        if (this.condition == null) {
+            throw new RuntimeException("Datasource is not defined. Call DbAssert::source() first to specify the source to test.");
         }
     }
 
