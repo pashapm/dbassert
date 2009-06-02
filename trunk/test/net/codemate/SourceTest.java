@@ -42,7 +42,6 @@ public class SourceTest {
         
         dbas.table().where("customers.id", 75);
         dbas.assert_column("customers.name", "aaa");
-        System.out.println(dbas.column_value("customers.name"));
-
+        Assert.assertEquals("aaa", dbas.column_value("customers.name"));
     }
 }

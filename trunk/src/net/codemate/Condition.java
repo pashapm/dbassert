@@ -12,7 +12,7 @@ package net.codemate;
 import java.util.ArrayList;
 import java.util.List;
 
-class Condition {
+public class Condition {
     private String tableName;
     private List<String> whereCond = new ArrayList<String>();
 
@@ -20,7 +20,6 @@ class Condition {
     }
 
     public Condition table(String tableName) {
-//        if (tableName == null || tableName.isEmpty()){throw new IllegalArgumentException("\"tableName\" param can not be null or empty.");}
         resetConditions();
         this.tableName = tableName;
         return this;
