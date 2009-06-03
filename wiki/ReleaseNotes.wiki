@@ -1,4 +1,10 @@
 #labels Phase-Implementation
+== Version 0.9.2 ==
+1. Bug fixes:
+* Issue2 (http://code.google.com/p/dbassert/issues/detail?id=2&can=1)
+2. Removed org.testfw package.
+
+
 == Version 0.9.1 ==
 1. API changes. Introduced new package namespace "net/codemate". Please use this one, in next version I'm going to get rid of "org/testfw" completely, however it's still there. 
 
