@@ -1,6 +1,6 @@
-DROP TABLE customers;
-DROP TABLE test_table;
-DROP TABLE events;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS test_table;
+DROP TABLE IF EXISTS events;
 
 CREATE TABLE customers
 (

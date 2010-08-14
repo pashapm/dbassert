@@ -21,6 +21,7 @@ class Source {
     private final String url;
     private final String username;
     private final String password;
+    private Connection connection;
 
     Source(final String name, final String driver, final String url, final String username, final String password) {
         if (name == null || driver == null || url == null) {
@@ -34,13 +35,23 @@ class Source {
     }
 
     Connection createConnection() throws SQLException {
-        final Connection jdbcCon;
-        try {
-            Class.forName(this.driver);
-            jdbcCon = DriverManager.getConnection(this.url, this.username, this.password);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc driver: " + this.driver);
+        if (connection == null || connection.isClosed()) {
+            try {
+                Class.forName(this.driver);
+                connection = DriverManager.getConnection(this.url, this.username, this.password);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Unable to load jdbc driver: " + this.driver);
+            }
         }
-        return jdbcCon;
+        return connection;
+    }
+
+    void close() {
+        try {
+            if (connection != null || !connection.isClosed()) {
+                connection.close();
+                connection = null;
+            }
+        } catch (Exception e) {}
     }
 }

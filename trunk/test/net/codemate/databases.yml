@@ -1,12 +1,12 @@
 testSource:
     url: jdbc:postgresql://127.0.0.1/test
     username: postgres
-    password: postgres
+    password: aadmin
     driver: org.postgresql.Driver
 testOracle:
     url: jdbc:postgresql://127.0.0.1/test_oracle
     username: postgres
-    password: postgres
+    password: aadmin
     driver: org.postgresql.Driver
 
 hsqlSource:

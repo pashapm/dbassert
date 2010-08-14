@@ -49,7 +49,7 @@ public class DbAssert implements DbAssertInterface {
     public DbSource source(String sourceNameToUse, Class invokerClass) {
         if (sourceNameToUse == null){throw new IllegalArgumentException("\"sourceNameToUse\" param can not be null.");}
         this.condition = new Condition();
-        this.dbSource = new DbSource(sourceNameToUse, this.sources, invokerClass);
+        this.dbSource = new DbSource(sourceNameToUse, this.sources.getSourceByName(sourceNameToUse), invokerClass);
         return this.dbSource;
     }
 

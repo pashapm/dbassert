@@ -11,6 +11,7 @@
 
 package net.codemate;
 
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,6 +40,12 @@ public class DbAssertTest
     {
         testSource.clean_table("events");
     }
+
+    @AfterClass
+    public static void oneTimeTearDown() {
+        testSource.close();
+    }
+
 
 
     @Test
@@ -134,8 +141,8 @@ public class DbAssertTest
         testSource.fixture("events");
         dbAssert.table("events");
         dbAssert.assert_count_gt("*", 1);
-        dbAssert.assert_count_lt("*", 10);
-        dbAssert.assert_count(5);
+        dbAssert.assert_count_lt("*", 30);
+        dbAssert.assert_count(20);
         dbAssert.table("events").where("id =1");
         dbAssert.assert_count_lt("*", 2);
         dbAssert.assert_count(1);

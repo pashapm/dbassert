@@ -12,6 +12,7 @@
 package net.codemate;
 
 import org.ho.yaml.Yaml;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,20 +28,27 @@ public class DbSourceTest
     DbSource dbSrc2;
     DbSource.TestBackdoor door;
     DbSource.TestBackdoor door2;
-    SourceSet source;
+    SourceSet sourceSet;
 
     @Before
     public void setUp()
     {
-        source = new SourceSet();
-        source.loadSources(Thread.currentThread().getContextClassLoader().getResourceAsStream("net/codemate/databases.yml"));
-        dbSrc = new DbSource("testSource", source , getClass());
-        dbSrc2 = new DbSource("testSource",source,  null);
+        sourceSet = new SourceSet();
+        sourceSet.loadSources(Thread.currentThread().getContextClassLoader().getResourceAsStream("net/codemate/databases.yml"));
+        String sourceName = "testSource";
+        dbSrc = new DbSource(sourceName, sourceSet.getSourceByName(sourceName) , getClass());
+        dbSrc2 = new DbSource(sourceName, sourceSet.getSourceByName(sourceName),  null);
         dbAssert = DbAssert.init("net/codemate/databases.yml");
         dbAssert.source("testSource");
         door = dbSrc.new TestBackdoor();
         door2 = dbSrc2.new TestBackdoor();
         dbSrc.clean_table("test_table");
+    }
+
+    @After
+    public  void oneTieTearDown() {
+        dbSrc.close();
+        dbSrc2.close();
     }
 
     @Test

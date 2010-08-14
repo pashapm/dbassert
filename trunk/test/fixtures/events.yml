@@ -6,7 +6,7 @@ event_one:
 event_two:
     id: 2
     name: some
-    login_name: 
+    login_name:
 
 event_three:
     id: 3
