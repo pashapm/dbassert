@@ -24,14 +24,19 @@ public class PackageExternalTest {
         dbassert.assert_column("name", "dglinenko");
     }
 
+    @Test
     public void testThatPases() {
        DbAssert dbAssert = DbAssert.init("net/codemate/databases.yml");
         DbSource testSource = dbAssert.source("testSource");
-        final Fixture eventsFixture = testSource.fixture("events");
+        testSource.clean_table("events");
+        final Fixture eventsFixture = testSource.fixture("net/codemate/fixtures/events.yml");
         final Fixture event_one = (Fixture) eventsFixture.get("event_one");
         // condition id =1
         dbAssert.table("events").where("id", String.valueOf(event_one.get("id")));
         dbAssert.assert_column("name", event_one.get("name"));
         dbAssert.assert_column("login_name", event_one.get("login_name"));
+
+        testSource.close();
     }
+
 }

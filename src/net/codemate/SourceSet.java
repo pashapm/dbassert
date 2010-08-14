@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class SourceSet {
     private final Map<String, Source> sources = new ConcurrentHashMap<String, Source>();
 
+
     void loadSources(final InputStream dsInputStream) {
         if (dsInputStream == null) {
             throw new IllegalArgumentException("InputStream with source definitions cannot be null");
@@ -40,11 +41,17 @@ class SourceSet {
         }
     }
 
-    Connection getConnection(final String sourceName) throws SQLException {
+    Source getSourceByName(final String sourceName) {
         final Source source = sources.get(sourceName);
         if (source == null) {
             throw new RuntimeException("\"" + sourceName + "\"" + " is not initialized.");
         }
+        return source;
+
+    }
+
+    Connection getConnection(final String sourceName) throws SQLException {
+        final Source source = getSourceByName(sourceName);
         return source.createConnection();
     }
 }

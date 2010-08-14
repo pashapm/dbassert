@@ -14,7 +14,7 @@ package net.codemate;
 
 
 public class Main {
-    private static final String VERSION = "0.9.2";
+    private static final String VERSION = "0.9.2.1";
 
     private Main() {
     }

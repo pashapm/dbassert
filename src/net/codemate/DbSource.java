@@ -31,7 +31,8 @@ import java.util.logging.Logger;
 public class DbSource {
     private static final Logger log = Logger.getLogger(DbSource.class.getName());
 
-    private final SourceSet sourceSet;
+    //private final SourceSet sourceSet;
+    private final Source source;
     private final String sourceName;
     private final Class invokerClass;
     private static final String VALUE_COL = "returned_value";
@@ -42,12 +43,12 @@ public class DbSource {
 
 
     /**
-     * @param sourceSet  SourceSet contains connection settings to the data source.
+     * @param source  Source contains connection settings to the data source.
      * @param sourceName the name of the db datasource to be used.
      * @param invoker    class name of the DbSource invoker to be able to load fixtures located with the invoker class.
      */
-    DbSource(final String sourceName, final SourceSet sourceSet, final Class invoker) {
-        this.sourceSet = sourceSet;
+    DbSource(final String sourceName, final Source source, final Class invoker) {
+        this.source= source;
         this.sourceName = sourceName;
         this.invokerClass = invoker;
     }
@@ -141,9 +142,9 @@ public class DbSource {
 
     private Object runSqlStatement(final String sql, final boolean isSelect) throws SQLException {
         log.fine("Running following SQL:\n" + sql);
-        Connection connection = null;
+
         try {
-            connection = this.sourceSet.getConnection(sourceName);
+            Connection connection = this.source.createConnection();
             final Statement statement = connection.createStatement();
             if (isSelect) {
                 final ResultSet rs = statement.executeQuery(sql);
@@ -161,10 +162,6 @@ public class DbSource {
             }
         } catch (SQLException e) {
             throw new SQLException("Unable to execute the following SQL stmt: " + sql, e);
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
@@ -246,10 +243,13 @@ public class DbSource {
     }
 
     private InputStream getFixtureAsStream(final String fixName) {
-        final String fixturePath;
+        String fixturePath ="";
         if (invokerClass != null) {
             final String clazzName = invokerClass.getName();
-            fixturePath = clazzName.substring(0, clazzName.lastIndexOf(".")).replace(".", "/") + "/fixtures/" + fixName + ".yml";
+            if (clazzName.lastIndexOf(".") >0){
+                fixturePath = clazzName.substring(0, clazzName.lastIndexOf(".")).replace(".", "/") + "/";
+            }
+            fixturePath += "fixtures/" + fixName + ".yml";
         } else {
             fixturePath = fixName;
         }
@@ -282,6 +282,16 @@ public class DbSource {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Cleans up resources and closes open database connections.
+     * Be a nice citizen and please call this method when you're done.
+     * <p>
+     * Using @After or @AfterClass in your jUnit tests would be a good choice.
+     */
+    public void close() {
+        this.source.close();
     }
 
     // Only for testing purpose
