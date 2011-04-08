@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS test_table;
 DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS domains;
 
 CREATE TABLE customers
 (
@@ -30,3 +31,14 @@ CREATE TABLE test_table
 )
 WITH (OIDS=FALSE);
 ALTER TABLE test_table OWNER TO postgres;
+
+CREATE TABLE domains
+(
+    id serial NOT NULL,
+    "name" character varying,
+    parent_id integer not null,
+    PRIMARY KEY(id),
+    FOREIGN KEY (parent_id) REFERENCES domains(id)
+)
+WITH (OIDS=FALSE);
+ALTER TABLE domains OWNER TO postgres;

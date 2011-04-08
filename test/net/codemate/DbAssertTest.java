@@ -59,6 +59,11 @@ public class DbAssertTest
     }
 
     @Test
+    public void testLoadingFixtureWithSelfReferencingFKs(){
+        final Fixture domainsFixture = testSource.fixture("domains");        
+    }
+
+    @Test
     public void testOnePointFive() {
         final Fixture eventsFixture = testSource.fixture("events");
         final Fixture event_one = (Fixture) eventsFixture.get("event_one");

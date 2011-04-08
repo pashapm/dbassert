@@ -13,12 +13,13 @@ package net.codemate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * Class representing Fixture - file in YAML format.
  * It extended from HashMap and represent key:value pairs from YAML file.
  */
-public class Fixture extends HashMap {
+public class Fixture extends LinkedHashMap {
     private String name;
 
     /**

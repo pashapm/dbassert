@@ -1,0 +1,20 @@
+domain4:
+    id: 4
+    name: domain4.com
+    parent_id:4
+domain5:
+    id: 5
+    name: domain5.domain4.com
+    parent_id: 4
+domain6:
+    id: 6
+    name: domain6.domain5.domain4.com
+    parent_id: 5
+domain7:
+    id: 7
+    name: domain7.domain5.domain4.com
+    parent_id: 5
+domain8:
+    id: 8
+    name: domain8.domain4.com
+    parent_id: 5
