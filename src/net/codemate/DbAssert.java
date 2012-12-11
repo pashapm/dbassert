@@ -170,7 +170,11 @@ public class DbAssert implements DbAssertInterface {
         final Long count;
         final Object returnedValue = column_value("count(" + fieldName + ")");
         try {
-            count = (Long) returnedValue;
+            if (returnedValue instanceof Integer) {
+                count = ((Integer) returnedValue).longValue();
+            } else {
+                count = (Long) returnedValue;
+            }
         }
         catch (NumberFormatException e) {
             throw new RuntimeException("Returned result is not of numeric type.");
