@@ -41,6 +41,10 @@ class SourceSet {
         }
     }
 
+    /*package*/ void addSource(String name, final String driver, final String url, final String username, final String password) {
+        sources.put(name, new Source(name, driver, url, username, password));
+    }
+
     Source getSourceByName(final String sourceName) {
         final Source source = sources.get(sourceName);
         if (source == null) {

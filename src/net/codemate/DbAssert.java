@@ -15,20 +15,23 @@ import java.util.Map;
 
 public class DbAssert implements DbAssertInterface {
     private Condition condition;
-    private SourceSet sources;
+    private final SourceSet sources = new SourceSet();
     private DbSource dbSource;
 
     private DbAssert(final String dbSourcesFile) {
         if (dbSourcesFile == null) {
             throw new IllegalArgumentException("Data source definition file cannot be null.");
         }
-        this.sources = new SourceSet();
         try {
             sources.loadSources(Thread.currentThread().getContextClassLoader().getResourceAsStream(dbSourcesFile));
         }
         catch (Exception e) {
             throw new RuntimeException("Unable to load/parse: " + dbSourcesFile + " as data source definition file.", e);
         }
+    }
+
+    private DbAssert(final String driver, final String url, final String username, final String password) {
+        sources.addSource("", driver, url, username, password);
     }
 
     /**
@@ -38,6 +41,14 @@ public class DbAssert implements DbAssertInterface {
      */
     public static DbAssert init(final String dbSourcesFile) {
         return new DbAssert(dbSourcesFile);
+    }
+
+    public static DbAssert init(final String driver, final String url, final String username, final String password) {
+        Assert.assertNotNull(driver);
+        Assert.assertNotNull(url);
+        Assert.assertNotNull(username);
+        Assert.assertNotNull(password);
+        return new DbAssert(driver, url, username, password);
     }
 
     /**
@@ -51,6 +62,14 @@ public class DbAssert implements DbAssertInterface {
         this.condition = new Condition();
         this.dbSource = new DbSource(sourceNameToUse, this.sources.getSourceByName(sourceNameToUse), invokerClass);
         return this.dbSource;
+    }
+
+    /**
+     * Sets the source name up.  Uses the default source.
+     * @return DbSource object representing the default source. This object can be used to prepare the database.
+     */
+    public DbSource source() {
+        return source("", null);
     }
 
     /**
@@ -170,11 +189,7 @@ public class DbAssert implements DbAssertInterface {
         final Long count;
         final Object returnedValue = column_value("count(" + fieldName + ")");
         try {
-            if (returnedValue instanceof Integer) {
-                count = ((Integer) returnedValue).longValue();
-            } else {
-                count = (Long) returnedValue;
-            }
+            count = (Long) returnedValue;
         }
         catch (NumberFormatException e) {
             throw new RuntimeException("Returned result is not of numeric type.");
