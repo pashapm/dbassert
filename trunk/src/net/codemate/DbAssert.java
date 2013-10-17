@@ -123,7 +123,13 @@ public class DbAssert implements DbAssertInterface {
     public void assert_column(String fieldName, BigDecimal expectedValue) {
         checkFieldName(fieldName);
         BigDecimal actualValue = (BigDecimal)column_value(fieldName);
-        assertEquals(expectedValue.stripTrailingZeros(), actualValue.stripTrailingZeros());
+        if (actualValue != null) {
+            actualValue = actualValue.stripTrailingZeros();
+        }
+        if (expectedValue != null) {
+            expectedValue = expectedValue.stripTrailingZeros();
+        }
+        assertEquals(expectedValue, actualValue);
     }
 
     /*
