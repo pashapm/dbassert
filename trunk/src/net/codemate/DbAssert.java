@@ -1,5 +1,5 @@
 /**
- * @(#) DbAssert.java;
+ * DbAssert.java;
  * <p/>
  * Created on Apr 6, 2009
  * AUTHOR    ** Danil Glinenko
@@ -9,8 +9,11 @@
 
 package net.codemate;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class DbAssert implements DbAssertInterface {
@@ -44,10 +47,10 @@ public class DbAssert implements DbAssertInterface {
     }
 
     public static DbAssert init(final String driver, final String url, final String username, final String password) {
-        Assert.assertNotNull(driver);
-        Assert.assertNotNull(url);
-        Assert.assertNotNull(username);
-        Assert.assertNotNull(password);
+        assertNotNull(driver);
+        assertNotNull(url);
+        assertNotNull(username);
+        assertNotNull(password);
         return new DbAssert(driver, url, username, password);
     }
 
@@ -57,6 +60,8 @@ public class DbAssert implements DbAssertInterface {
      * @param invokerClass  class name of the DbAssert invoker to be able to load fixtures located with the invoker class.
      * @return DbSource object representing the source name passed as params. This object can be used to prepare the database.
      */
+    @SuppressWarnings("rawtypes")
+    @Override
     public DbSource source(String sourceNameToUse, Class invokerClass) {
         if (sourceNameToUse == null){throw new IllegalArgumentException("\"sourceNameToUse\" param can not be null.");}
         this.condition = new Condition();
@@ -77,6 +82,7 @@ public class DbAssert implements DbAssertInterface {
      * @param sourceNameToUse name of the source to be used.
      * @return DbSource object representing the source name passed as params. This object can be used to prepare the database.
      */
+    @Override
     public DbSource source(String sourceNameToUse) {
         return source(sourceNameToUse, null);
     }
@@ -86,6 +92,7 @@ public class DbAssert implements DbAssertInterface {
      * @param tableName table name.
      * @return Condition object that can be used to set additional conditions for assertions.
      */
+    @Override
     public Condition table(final String tableName) {
         checkProperInitialization();
         return this.condition.table(tableName);
@@ -95,6 +102,7 @@ public class DbAssert implements DbAssertInterface {
      * Resets previously set conditions.
      * @return Condition object that can be used to set addtional conditions for assertions.
      */
+    @Override
     public Condition table() {
         checkProperInitialization();
         return this.condition.table();
@@ -105,31 +113,48 @@ public class DbAssert implements DbAssertInterface {
      * @param fieldName     field name in table to look for.
      * @param expectedValue expected value in the field.
      */
+    @Override
     public void assert_column(String fieldName, Object expectedValue) {
-        if (fieldName == null || fieldName.isEmpty()){throw new IllegalArgumentException("\"fieldName\" param can not be null or empty.");}
+        checkFieldName(fieldName);
         final Object actualValue = column_value(fieldName);
-        Assert.assertEquals(expectedValue, actualValue);
+        assertEquals(expectedValue, actualValue);
     }
+
+    public void assert_column(String fieldName, BigDecimal expectedValue) {
+        checkFieldName(fieldName);
+        BigDecimal actualValue = (BigDecimal)column_value(fieldName);
+        assertEquals(expectedValue.stripTrailingZeros(), actualValue.stripTrailingZeros());
+    }
+
     /*
     * Checks if the field with given name is empty in database.
     *
     * @param fieldName field name to check value into.
     */
+    @Override
     public void assert_not_empty(String fieldName) {
-        if (fieldName == null || fieldName.isEmpty()){throw new IllegalArgumentException("\"fieldName\" param can not be null or empty.");}
-        Assert.assertNotNull(column_value(fieldName));
+        checkFieldName(fieldName);
+        assertNotNull(column_value(fieldName));
     }
+
+    private void checkFieldName(String fieldName) {
+        if (fieldName == null || fieldName.isEmpty()) {
+            throw new IllegalArgumentException("\"fieldName\" param can not be null or empty.");
+        }
+    }
+
     /**
      * Checks if the record count for the conditions set match
      * <code>count</code>
      *
      * @param count expected number of records matched.
      */
+    @Override
     public void assert_count(Integer count) {
         if (count < 0) {
             throw new IllegalArgumentException("count must be 0 or more");
         }
-        Assert.assertEquals(count.longValue(), takeCount("*"));
+        assertEquals(count.longValue(), (long)takeCount("*"));
     }
     /**
      * Checks if number of returned records greater than given number
@@ -137,11 +162,12 @@ public class DbAssert implements DbAssertInterface {
      * @param fieldName fieldName for count() function. Might be "*"
      * @param counter   expected number of records should be greter than this.
      */
+    @Override
     public void assert_count_gt(String fieldName, Integer counter) {
         if (fieldName == null || counter < 0) {
             throw new IllegalArgumentException("fieldName param must not be null and counter must not be negative.");
         }
-        Assert.assertTrue(takeCount(fieldName) > counter);
+        assertTrue(takeCount(fieldName) > counter);
     }
     /**
      * Checks if number of returned records less than given number
@@ -149,17 +175,19 @@ public class DbAssert implements DbAssertInterface {
      * @param fieldName fieldName for count() function. Might be "*"
      * @param counter   expected number of records should be less than this.
      */
+    @Override
     public void assert_count_lt(String fieldName, int counter) {
         if (fieldName == null || counter < 0) {
             throw new IllegalArgumentException("fieldName param must not be null and counter must not be negative.");
         }
-        Assert.assertTrue(takeCount(fieldName) < counter);
+        assertTrue(takeCount(fieldName) < counter);
     }
     /**
      * Compares actual values in database with expected ones.
      *
      * @param fieldValueMap Map with db fields and expected values. KEY: fieldName; VALUE: expectedValue.
      */
+    @Override
     public void assert_columns(Map<String, String> fieldValueMap) {
         if (fieldValueMap == null){throw new IllegalArgumentException("\"fieldValueMap\" param can not be null.");}
         for (final String fieldName : fieldValueMap.keySet()) {
@@ -173,8 +201,9 @@ public class DbAssert implements DbAssertInterface {
      * @param fieldName field name to get value from.
      * @return actual value stored in db.
      */
+    @Override
     public Object column_value(String fieldName) {
-        if (fieldName == null || fieldName.isEmpty()){throw new IllegalArgumentException("\"fieldName\" param can not be null or empty.");}
+        checkFieldName(fieldName);
         validatePreConditions(fieldName);
         final Object result;
         try {
